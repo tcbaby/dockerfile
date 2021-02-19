@@ -1,14 +1,9 @@
-FROM centos
+FROM tcbaby/jdk8
 MAINTAINER tcbaby <cbtan@foxmail.com>
 
 RUN cd /usr/local; \
-    yum -y install wget; \
-    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-        http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz; \
     wget https://apache.website-solution.net/tomcat/tomcat-9/v9.0.43/bin/apache-tomcat-9.0.43.tar.gz; \
-    tar zxvf jdk-8u131-linux-x64.tar.gz; \
     tar zxvf apache-tomcat-9.0.41.tar.gz; \
-    mv jdk1.8.0_131 jdk1.8; \
     mv apache-tomcat-9.0.41 tomcat; \
     rm -f bin/*bat *tar.gz*; \
     cd tomcat; \
@@ -20,16 +15,11 @@ RUN cd /usr/local; \
 WORKDIR /usr/local/tomcat
 VOLUME /usr/local/tomcat/webapps /usr/local/tomcat/logs
 
-# jdk
-ENV JAVA_HOME /usr/local/jdk1.8
-ENV JRE_HOME ${JAVA_HOME}/jre
-ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
-ENV JAVA_PATH ${JAVA_HOME}/bin:${JRE_HOME}/bin
 # tomcat
 ENV CATALINA_HOME /usr/local/tomcat
 ENV JAVA_OPTS -server -Xms1g -Xmx2g -Djava.awt.headless=true -XX:+UseConcMarkSweepGC  -XX:+UseParNewGC  -XX:+CMSParallelRemarkEnabled  -Xloggc:/tmp/gc.log  -XX:GCLogFileSize=10M -XX:NumberOfGCLogFiles=10 -XX:+UseGCLogFileRotation -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -XX:+DisableExplicitGC -verbose:gc -Dfile.encoding=UTF-8 -Duser.timezone=GMT+08
 # path
-ENV PATH $PATH:${JAVA_PATH}:$CATALINA_HOME/bin
+ENV PATH $PATH:$CATALINA_HOME/bin
 
 EXPOSE 8080
 CMD catalina.sh run

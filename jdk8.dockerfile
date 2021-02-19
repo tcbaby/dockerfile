@@ -7,22 +7,15 @@ RUN cd /usr/local; \
         http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz; \
     tar zxvf jdk-8u131-linux-x64.tar.gz; \
     mv jdk1.8.0_131 jdk1.8; \
-    rm -f *tar.gz*; \
-    mkdir /app
+    rm -f *tar.gz*
 
-WORKDIR /app
-
-#jar file
-ENV JAR_FILE app.jar
 # jdk
 ENV JAVA_HOME /usr/local/jdk1.8
 ENV JRE_HOME ${JAVA_HOME}/jre
 ENV CLASSPATH .:${JAVA_HOME}/lib:${JRE_HOME}/lib
 ENV JAVA_PATH ${JAVA_HOME}/bin:${JRE_HOME}/bin
-ENV JAVA_OPTS -server -Xms1g -Xmx2g -Djava.awt.headless=true -XX:+UseConcMarkSweepGC  -XX:+UseParNewGC  -XX:+CMSParallelRemarkEnabled  -Xloggc:/tmp/gc.log  -XX:GCLogFileSize=10M -XX:NumberOfGCLogFiles=10 -XX:+UseGCLogFileRotation -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -XX:+DisableExplicitGC -verbose:gc -Dfile.encoding=UTF-8 -Duser.timezone=GMT+08
+ENV JAVA_OPTS -Dfile.encoding=UTF-8 -Duser.timezone=GMT+08
 # path
 ENV PATH $PATH:${JAVA_PATH}
 
-EXPOSE 7777
-
-CMD java ${JAVA_OPTS} -jar ${JAR_FILE}
+CMD java ${JAVA_OPTS}
